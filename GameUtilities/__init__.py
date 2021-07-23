@@ -43,27 +43,62 @@ class Persona():
         rounds = 0
         InimigoVidaTemp = inimigo.vida
         PersonaVidaTemp = persona.vida
+        PersonaDanoTemp = persona.dano
         if persona.akuma == 'borracha':
             buff = PersonaVidaTemp * 0.15
             PersonaVidaTemp += buff
+        if persona.akuma == 'controle':
+            buffdano = PersonaDanoTemp * 0.40
+            buffvida = PersonaVidaTemp * 0.10
+            PersonaVidaTemp -= buffvida
+            PersonaDanoTemp += buffdano
+        if persona.akuma == 'estrondo':
+            buffvida = PersonaVidaTemp * 0.30 
+            PersonaVidaTemp += buffvida
         while True:
             rounds += 1
 
-
-            #Persona atacando
-            InimigoVidaTemp -= persona.dano
-            print(f'ROUND{rounds}: Você ataca {inimigo.classe}, Vida restante: {InimigoVidaTemp}')
+            #persona Atacando
+            opcao = int(input('1-Atacar  2-AtqEspecial  3-Desistir'))
+            if opcao == 1:
+                InimigoVidaTemp -= PersonaDanoTemp
+                print(f'ROUND{rounds}: Você ataca {inimigo.classe}, Vida restante: {InimigoVidaTemp}')
+            if opcao == 2:
+                if persona.akuma == 'Sem':
+                    print('Você não possui nenhum AtqEspecial')
+                if persona.akuma == 'borracha':
+                    input('AtqEspecial: Red Hawk:(120 de dano)')
+                    InimigoVidaTemp -= 120
+                    print(f'ROUND{rounds}: Você usou Red Hawk, Vida restante: {InimigoVidaTemp}')
+                if persona.akuma == 'controle':
+                    input('AtqEspecial: Gamma Rush:(240 de dano)')
+                    InimigoVidaTemp -= 240
+                    print(f'ROUND{rounds}: Você usou Gamma Rush, Vida restante: {InimigoVidaTemp}')
+                if persona.akuma == 'estrondo':
+                    input('AtqEspecial: El Thor:(400 de dano)')
+                    InimigoVidaTemp -= 400
+                    print(f'ROUND{rounds}: Você usou El Thor, Vida restante: {InimigoVidaTemp}')
+            if opcao == 3:
+                print('A luta acabou com sua desistência')
+                return Persona(persona.classe, persona.vida, persona.dano, persona.xp +2, persona.nivel, persona.akuma, persona.wallet)
             #vitoria
             if InimigoVidaTemp <= 0:
                 print('Vítoria')
                 if inimigo.classe == 'InimigoFacil':
-                    return Persona(persona.classe, persona.vida, persona.dano, persona.xp + 1, persona.nivel, persona.akuma, persona.wallet+500)
+                    return Persona(persona.classe, persona.vida, persona.dano, persona.xp + 1, persona.nivel, persona.akuma, persona.wallet+500) #50
                 if inimigo.classe == 'InimigoMedio':
-                    return Persona(persona.classe, persona.vida, persona.dano, persona.xp +2, persona.nivel, persona.akuma, persona.wallet+10)
+                    return Persona(persona.classe, persona.vida, persona.dano, persona.xp +2, persona.nivel, persona.akuma, persona.wallet+100)
 
             #Inimigo Atacando
-            PersonaVidaTemp -= inimigo.dano
-            print(f'ROUND{rounds}: {inimigo.classe} te ataca, Vida restante: {PersonaVidaTemp}')
+            if persona.akuma == 'estrondo':
+                if inimigo.haki == 'Com':
+                    PersonaVidaTemp -= inimigo.dano
+                    print(f'ROUND{rounds}: {inimigo.classe} Te acerta, Efeito Logia, Vida restante: {PersonaVidaTemp}')
+                else:
+                    print(f'ROUND{rounds}: {inimigo.classe} Não te acerta, Efeito Logia, Vida restante: {PersonaVidaTemp}')
+            else:
+                PersonaVidaTemp -= inimigo.dano
+                print(f'ROUND{rounds}: {inimigo.classe} te ataca, Vida restante: {PersonaVidaTemp}')
             #derrota
             if PersonaVidaTemp <= 0:
                 print('DERROTA!, tente melhorar seus status, começe com batalhas mais fáceis')
@@ -75,7 +110,9 @@ class Persona():
 Borracha(1), custa: 100Zenis
     Buffs = +15(Porcento de vida) & Atq Especial(ainda nao feito) \n
 Controle(2), custa: 500Zenis
-    Buffs =  -10(Porcento de vida) & +40(Porcento de vida) & Atq Especial(ainda nao feito)
+    Buffs =  -10(Porcento de vida) & +40(Porcento de dano) & Atq Especial(ainda nao feito) \n
+Estrondo(3), custa: 1000Zenis
+    Buffs = +30(Porcento de vida) & Logia & Atq Especial(ainda nao feito) 
   Digite 0 Para volta ao menu
         ''')
         while True:
@@ -95,7 +132,23 @@ Controle(2), custa: 500Zenis
                         return Persona(persona.classe, persona.vida, persona.dano, persona.xp, persona.nivel, persona.akuma, persona.wallet-100)
                 #ope ope
                 if compra == 2:
-                    pass
+                    if persona.wallet <500:
+                        print(f'Ainda não possui 500 zenis, Seu dinheiro:{persona.wallet}')
+                        return Persona(persona.classe, persona.vida, persona.dano, persona.xp, persona.nivel, persona.akuma, persona.wallet)
+                    else:
+                        persona.akuma = 'controle'
+                        print('Sucesso')
+                        return Persona(persona.classe, persona.vida, persona.dano, persona.xp, persona.nivel, persona.akuma, persona.wallet-500)
+                #goro goro
+                if compra == 3:
+                    if persona.wallet <1000:
+                        print(f'Ainda não possui 1000 zenis, Seu dinheiro:{persona.wallet}')
+                        return Persona(persona.classe, persona.vida, persona.dano, persona.xp, persona.nivel, persona.akuma, persona.wallet)
+                    else:
+                        persona.akuma = 'estrondo'
+                        print('Sucesso')
+                        return Persona(persona.classe, persona.vida, persona.dano, persona.xp, persona.nivel, persona.akuma, persona.wallet-1000)
+            #erro
             except Exception as erro:
                 print(f'Erro, relatório:{erro}')
 

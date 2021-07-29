@@ -34,6 +34,17 @@ class Persona():
             if self.xp >= 6 <= 10:
                 print('Seu nivel aumentou Para 2')
                 return Persona(self.classe, self.vida+100, self.dano+100, self.xp, self.nivel+1, self.akuma, self.wallet)
+        if self.nivel == 2:
+            if self.xp < 14:
+                print(f'ainda não possui XP, Seu XP:{self.xp} Necessário: 15')
+                return Persona(self.classe, self.vida, self.dano, self.xp, self.nivel, self.akuma, self.wallet)
+            if self.xp > 15 <= 20:
+                print('Seu nível aumentou para 3')
+                return Persona(self.classe, self.vida+150, self.dano+150, self.xp, self.nivel+1, self.akuma, self.wallet)
+        if self.nivel == 3:
+            print('Ainda não tem outro nível')
+            return Persona(self.classe, self.vida, self.dano, self.xp, self.nivel, self.akuma, self.wallet)
+
 
     def status(self):
         print(f'CLASSE: {self.classe}\nVIDA: {self.vida}\nDANO: {self.dano}\nXP: {self.xp}\nFRUTA: {self.akuma}')
@@ -85,12 +96,15 @@ class Persona():
             if InimigoVidaTemp <= 0:
                 print('Vítoria')
                 if inimigo.classe == 'InimigoFacil':
-                    return Persona(persona.classe, persona.vida, persona.dano, persona.xp + 1, persona.nivel, persona.akuma, persona.wallet+500) #50
+                    return Persona(persona.classe, persona.vida, persona.dano, persona.xp + 100, persona.nivel, persona.akuma, persona.wallet+500) #1 #50
                 if inimigo.classe == 'InimigoMedio':
                     return Persona(persona.classe, persona.vida, persona.dano, persona.xp +2, persona.nivel, persona.akuma, persona.wallet+100)
+                if inimigo.classe == 'BossFacil':
+                    return Persona(persona.classe, persona.vida, persona.dano, persona.xp +5, persona.nivel, persona.akuma, persona.wallet+400)
 
             #Inimigo Atacando
-            if persona.akuma == 'estrondo':
+            if persona.akuma in 'estrondo':
+                print(f'Você possuiu uma fruta nome dela {persona.akuma}')
                 if inimigo.haki == 'Com':
                     PersonaVidaTemp -= inimigo.dano
                     print(f'ROUND{rounds}: {inimigo.classe} Te acerta, Efeito Logia, Vida restante: {PersonaVidaTemp}')
@@ -165,6 +179,7 @@ class inimigo():
 #mecanica de haki ainda nao completa
 InimigoFacil = inimigo('InimigoFacil', 100, 25, 'Sem')
 InimigoMedio = inimigo('InimigoMedio', 200, 50, 'Com')
+BossFacil = inimigo('BossFacil', 600, 150, 'Com')
 
 
 def StartGame(personagem):
@@ -178,8 +193,16 @@ Digite 5 para Sair
 ''', end='')
             acao = int(input(':'))
             if acao == 1:
-                acaobatalha = int(input('''Digite 1 para batalha facil
-digite 2 para batalha média:'''))
+                acaobatalha = int(input('''
+Digite 0 para ver os bosses
+Digite 1 para batalha facil
+digite 2 para batalha média:
+'''))
+                if acaobatalha == 0:
+                    print('Digite 3 para boss facil')
+                    acaobatalha = int(input('a dada'))
+                    if acaobatalha == 3:
+                        personagem = Persona.batalha(personagem, BossFacil)
                 if acaobatalha == 1:
                     personagem = Persona.batalha(personagem, InimigoFacil)
                 if acaobatalha == 2:

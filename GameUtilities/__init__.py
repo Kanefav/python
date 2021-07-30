@@ -166,8 +166,16 @@ Estrondo(3), custa: 1000Zenis
             except Exception as erro:
                 print(f'Erro, relatório:{erro}')
 
-
-
+            
+    def SalvarPersonagem(personagem):
+        try:
+            arq = open('profile', 'at')
+        except Exception as erro:
+            print(f'erro abrindo o arquivo, erro: {erro}')
+        persona = f'{personagem.classe},{personagem.vida},{personagem.dano},{personagem.xp},{personagem.nivel},{personagem.akuma},{personagem.wallet}\n'
+        arq.write(persona)
+        arq.close()
+          
 
 class inimigo():
     def __init__(self, classe, vida, dano, haki):
@@ -189,7 +197,8 @@ def StartGame(personagem):
 Digite 2 para Tentar dar Level Up
 Digite 3 para Olhar seus Status
 Digite 4 para ir Para Loja de Frutas
-Digite 5 para Sair
+Digite 5 para Salvar
+Digite 6 para Sair
 ''', end='')
             acao = int(input(':'))
             if acao == 1:
@@ -214,8 +223,30 @@ digite 2 para batalha média:
             if acao == 4:
                 personagem = Persona.akumas(personagem)
             if acao == 5:
+                Persona.SalvarPersonagem(personagem)
+            if acao == 6:
                 break
         except ValueError:
             print('Digite apenas algum número das opçoes')
         except Exception as erro:
-            print(f'Algum erro desconhecido, relatório: {erro}')
+            print(f'Algum erro desconhecido, relatório: {erro}')   
+
+
+def CriarArquivo(nome):
+    try:
+        arq = open(nome, 'wt')
+        arq.close
+    except Exception as erro:
+        print(f'Erro: {erro}')
+    else:
+        return arq
+
+
+def VerificarArqExistente(nome):
+    try:
+        arq = open(nome, 'rt')
+        arq.close()
+    except FileNotFoundError:
+        return False
+    else:
+        return True

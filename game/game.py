@@ -2,18 +2,15 @@ from socket import *
 import GameUtilities as func
     
 
-if func.VerificarArqExistente('profile') == False:
-    func.CriarArquivo('profile')
-else:
-    host = gethostname()
-    port = 22441
+host = gethostname()
+port = 22441
 
+ask = str(input('Iniciar Jogo? [S/N]')).upper()
+if ask in 'SIM':
     cliente = socket(AF_INET, SOCK_STREAM)
     cliente.connect((host, port))
-
     while True:
-        enviar = str(input('Digite: '))
-        cliente.send(enviar.encode())
-
-    #MainPersona = Persona.criar()
-    #StartGame(MainPersona)
+        cliente.send('start'.encode())
+        receber = cliente.recv(2048)
+        print(f'{receber.decode()}')
+        #Abandonado

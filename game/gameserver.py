@@ -1,16 +1,25 @@
 from socket import *
+import GameUtilities as func
 
-host = gethostname()
-port = 22441
 
-server = socket(AF_INET, SOCK_STREAM)
-server.bind((host, port))
-server.listen(2)
-print(f'Host:{host}, Porta:{port}')
+if func.VerificarArqExistente('profile') == False:
+    func.CriarArquivo('profile')
+else:
+    host = gethostname()
+    port = 22441
 
-while True:
-    connection, adr = server.accept()
-    print('Connectado')
+    server = socket(AF_INET, SOCK_STREAM)
+    server.bind((host, port))
+    server.listen(2)
+    print(f'Host:{host}, Porta:{port}')
+
     while True:
-        recebido = connection.recv(2048)
-        print(recebido.decode())
+        connection, adr = server.accept()
+        print(f'Connect from {adr}')
+        while True:
+            receber = connection.recv(2048)
+            if receber.decode() == 'start':
+                msg = 'Jogo Iniciando'
+                server.sendto(msg.encode(), adr)
+                MainPersona = func.Persona.criar()
+                func.StartGame(MainPersona)

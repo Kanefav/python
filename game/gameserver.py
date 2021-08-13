@@ -16,10 +16,10 @@ else:
     while True:
         connection, adr = server.accept()
         print(f'Connect from {adr}')
+        receber = connection.recv(2048)
+        if receber.decode() == 'start':
+            msg = 'Jogo Iniciando'
+            connection.sendto(msg.encode(), adr)
         while True:
-            receber = connection.recv(2048)
-            if receber.decode() == 'start':
-                msg = 'Jogo Iniciando'
-                server.sendto(msg.encode(), adr)
-                MainPersona = func.Persona.criar()
-                func.StartGame(MainPersona)
+            criarpersona = 'PKey'
+            connection.sendto(criarpersona.encode(), adr)

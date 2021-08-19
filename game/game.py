@@ -17,4 +17,3 @@ if ask in 'SIM':
         if persona.decode() == 'PKey':
             Personagem = func.Persona.criar() 
             func.StartGame(Personagem)
-        break

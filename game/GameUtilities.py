@@ -169,13 +169,22 @@ Estrondo(3), custa: 1000Zenis
             
     def SalvarPersonagem(personagem):
         try:
-            arq = open('profile', 'at')
+            arq = open('profile', 'wt')
         except Exception as erro:
             print(f'erro abrindo o arquivo, erro: {erro}')
-        persona = f'{personagem.classe},{personagem.vida},{personagem.dano},{personagem.xp},{personagem.nivel},{personagem.akuma},{personagem.wallet}\n'
+        persona = f'{personagem.classe},{personagem.vida},{personagem.dano},{personagem.xp},{personagem.nivel},{personagem.akuma},{personagem.wallet}'
         arq.write(persona)
         arq.close()
-          
+
+    def CarregarPersonagem(nome):
+        arq = open('profile', 'rt')
+        for atributo in arq:
+            personaTemp = atributo.split(',')
+        
+        #persona = f'{personaTemp[0]}, {personaTemp[1]}, {personaTemp[2]}, {personaTemp[3]}, {personaTemp[4]}, {personaTemp[5]}, {personaTemp[6]}'
+        return Persona(personaTemp[0], int(personaTemp[1]), int(personaTemp[2]), int(personaTemp[3]), int(personaTemp[4]), personaTemp[5], int(personaTemp[6]))
+
+        
 
 class inimigo():
     def __init__(self, classe, vida, dano, haki):
@@ -198,7 +207,8 @@ Digite 2 para Tentar dar Level Up
 Digite 3 para Olhar seus Status
 Digite 4 para ir Para Loja de Frutas
 Digite 5 para Salvar
-Digite 6 para Sair
+Digite 6 para Carregar um save
+Digite 7 para Sair
 ''', end='')
             acao = int(input(':'))
             if acao == 1:
@@ -209,7 +219,7 @@ digite 2 para batalha média:
 '''))
                 if acaobatalha == 0:
                     print('Digite 3 para boss facil')
-                    acaobatalha = int(input('a dada'))
+                    acaobatalha = int(input(':'))
                     if acaobatalha == 3:
                         personagem = Persona.batalha(personagem, BossFacil)
                 if acaobatalha == 1:
@@ -225,6 +235,8 @@ digite 2 para batalha média:
             if acao == 5:
                 Persona.SalvarPersonagem(personagem)
             if acao == 6:
+                personagem  = Persona.CarregarPersonagem(personagem)
+            if acao == 7:
                 break
         except ValueError:
             print('Digite apenas algum número das opçoes')

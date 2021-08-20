@@ -169,20 +169,30 @@ Estrondo(3), custa: 1000Zenis
             
     def SalvarPersonagem(personagem):
         try:
-            arq = open('profile', 'wt')
+            arq = open('profile', 'at')
         except Exception as erro:
             print(f'erro abrindo o arquivo, erro: {erro}')
-        persona = f'{personagem.classe},{personagem.vida},{personagem.dano},{personagem.xp},{personagem.nivel},{personagem.akuma},{personagem.wallet}'
+        persona = f'{personagem.classe},{personagem.vida},{personagem.dano},{personagem.xp},{personagem.nivel},{personagem.akuma},{personagem.wallet}, \n'
         arq.write(persona)
         arq.close()
 
     def CarregarPersonagem(nome):
         arq = open('profile', 'rt')
-        for atributo in arq:
-            personaTemp = atributo.split(',')
-        
-        #persona = f'{personaTemp[0]}, {personaTemp[1]}, {personaTemp[2]}, {personaTemp[3]}, {personaTemp[4]}, {personaTemp[5]}, {personaTemp[6]}'
-        return Persona(personaTemp[0], int(personaTemp[1]), int(personaTemp[2]), int(personaTemp[3]), int(personaTemp[4]), personaTemp[5], int(personaTemp[6]))
+        inicio = 0
+        conte = 0
+        for linha in arq:
+            conte += 1
+            if conte == 0:
+                print(f'Mostrando Save: ', end='')
+            linha.replace('\n', '')
+            for times in range(inicio, conte):
+                personaTemp = linha.split(',')
+                print(f'{personaTemp[0]}, {personaTemp[1]}, {personaTemp[2]}, {personaTemp[3]}, {personaTemp[4]}, {personaTemp[5]}, {personaTemp[6]}')
+                opcao = str(input('Quer esse save? [S/N] ')).upper()
+                if opcao in 'SIM':
+                    return Persona(personaTemp[0], personaTemp[1], personaTemp[2], personaTemp[3], personaTemp[4], personaTemp[5], personaTemp[6])
+        persona = personaTemp
+        return Persona(persona[0], int(persona[1]), int(persona[2]), int(persona[3]), int(persona[4]), persona[5], int(persona[6]))
 
         
 

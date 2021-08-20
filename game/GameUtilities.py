@@ -179,10 +179,10 @@ Estrondo(3), custa: 1000Zenis
     def CarregarPersonagem(nome):
         arq = open('profile', 'rt')
         inicio = 0
-        conte = 0
+        conte = 1
         for linha in arq:
-            conte += 1
             if conte == 0:
+                linha += 1
                 print(f'Mostrando Save: ', end='')
             linha.replace('\n', '')
             for times in range(inicio, conte):

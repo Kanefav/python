@@ -3,8 +3,7 @@ def traduzir(x, y, grau=2):
         a = y/x
         return f'{y}/{x} = {a}, equação: F(x)= {a}x'
     if grau == 2:
-        a = y/x 
-        a *= 1
+        a = y*-1/x 
         if y >= 0:
             return f'{y}/{x} = {a}, equação: F(x)= {a:.1f}x + {y}'
         else:

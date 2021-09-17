@@ -4,6 +4,7 @@ def traduzir(x, y, grau=2):
         return f'{y}/{x} = {a}, equação: F(x)= {a}x'
     if grau == 2:
         a = y*-1/x 
+        y *= -1
         if y >= 0:
             return f'{y}/{x} = {a}, equação: F(x)= {a:.1f}x + {y}'
         else:
